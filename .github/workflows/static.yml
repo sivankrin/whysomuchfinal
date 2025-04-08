@@ -1,10 +1,10 @@
-# Deploy static content to GitHub Pages
-name: Deploy static site to GitHub Pages
+# Deploy Vite (React) app to GitHub Pages
+name: Deploy Vite app to GitHub Pages
 
 on:
   push:
-    branches: ["main"]  # מפעיל על כל שינוי בסניף הראשי
-  workflow_dispatch:     # מאפשר הפעלה ידנית
+    branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -26,13 +26,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup GitHub Pages
-        uses: actions/configure-pages@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18  # אפשר לשנות לגרסה אחרת אם צריך
 
-      - name: Upload static files
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './src'  # תקייה שבה נמצא index.html שלך
+          path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
